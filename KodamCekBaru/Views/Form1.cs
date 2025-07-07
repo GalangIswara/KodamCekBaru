@@ -1,12 +1,12 @@
-﻿using System;
-using System.Data;
+﻿using KodamCekBaru.Controllers;
+using System;
 using System.Windows.Forms;
 
-namespace KodamCekBaru
+namespace KodamCekBaru.Views
 {
     public partial class Form1 : Form
     {
-        DatabaseHelper dbHelper = new DatabaseHelper();
+        private readonly KhodamController controller = new KhodamController();
 
         public Form1()
         {
@@ -15,26 +15,21 @@ namespace KodamCekBaru
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            dataGridViewRiwayat.DataSource = dbHelper.LoadUserCheckData();
+            dataGridViewRiwayat.DataSource = controller.AmbilRiwayat();
         }
 
         private void btnCekKhodam_Click(object sender, EventArgs e)
         {
-            var row = dbHelper.GetRandomKodam();
+            var khodam = controller.DapatkanKhodamAcak();
 
-            if (row != null)
+            if (khodam != null)
             {
-                string namaKodam = row["nama_kodam"].ToString();
-                string elemen = row["elemen"].ToString();
-                string tingkatEnergi = row["tingkat_energi"].ToString();
-                string deskripsi = row["deskripsi"].ToString();
-
-                MessageBox.Show($"Khodam: {namaKodam}\nElemen: {elemen}\nEnergi: {tingkatEnergi}\nDeskripsi: {deskripsi}");
+                MessageBox.Show($"Khodam: {khodam.NamaKhodam}\nElemen: {khodam.Elemen}\nEnergi: {khodam.TingkatEnergi}\nDeskripsi: {khodam.Deskripsi}");
 
                 string namaUser = string.IsNullOrWhiteSpace(txtNamaUser.Text) ? "Guest" : txtNamaUser.Text.Trim();
-                dbHelper.SaveUserCheck(namaUser, namaKodam);
+                controller.SimpanRiwayat(namaUser, khodam.NamaKhodam);
 
-                dataGridViewRiwayat.DataSource = dbHelper.LoadUserCheckData();
+                dataGridViewRiwayat.DataSource = controller.AmbilRiwayat();
             }
             else
             {
@@ -48,17 +43,15 @@ namespace KodamCekBaru
 
             if (confirm == DialogResult.Yes)
             {
-                dbHelper.ClearUserCheck();
+                controller.HapusRiwayat();
                 MessageBox.Show("Semua riwayat berhasil dihapus.");
-
-                dataGridViewRiwayat.DataSource = dbHelper.LoadUserCheckData();
+                dataGridViewRiwayat.DataSource = controller.AmbilRiwayat();
             }
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-            dataGridViewRiwayat.DataSource = dbHelper.LoadUserCheckData();
+            dataGridViewRiwayat.DataSource = controller.AmbilRiwayat();
         }
-
     }
 }

@@ -139,7 +139,7 @@
             this.Controls.Add(this.btnCekKodam);
             this.Name = "Form1";
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load_1);
+            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRiwayat)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -157,4 +157,3 @@
         private System.Windows.Forms.Label label2;
     }
 }
-
